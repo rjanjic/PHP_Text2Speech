@@ -174,8 +174,8 @@ class PHP_Text2Speech {
 	 * @return 	Integer
 	 */ 
 	function getStart($contents) {
-		for($i=0; $i < strlen($contents); $i++){
-			if(ord(substr($contents, $i, 1)) == 255){
+		for ($i=0; $i < strlen($contents); $i++) {
+			if (ord(substr($contents, $i, 1)) == 255) {
 				return $i;
 			}
 		}
@@ -187,9 +187,9 @@ class PHP_Text2Speech {
 	 */ 
 	function getEnd($contents) {
 		$c = substr($contents, (strlen($contents) - 128));
-		if(strtoupper(substr($c, 0, 3)) == 'TAG'){
+		if (strtoupper(substr($c, 0, 3)) == 'TAG') {
 			return $c;
-		}else{
+		} else {
 			return FALSE;
 		}
 	}
@@ -207,7 +207,7 @@ class PHP_Text2Speech {
 			return substr($contents, $start);
 		}
 		// Remove end tag
-		if ($this->getEnd($contents) !== FALSE){
+		if ($this->getEnd($contents) !== FALSE) {
 			return substr($contents, 0, (strlen($contents) - 129));
 		}
 	}
@@ -218,18 +218,18 @@ class PHP_Text2Speech {
 	 */ 
 	function download($url, $path) { 
 		// Is curl installed?
-		if (!function_exists('curl_init')){ // use file get contents 
-		    $output = file_get_contents($url); 
-		}else{ // use curl 
-		    $ch = curl_init(); 
-		    curl_setopt($ch, CURLOPT_URL, $url); 
-		    curl_setopt($ch, CURLOPT_AUTOREFERER, true); 
-		    curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; rv:1.7.3) Gecko/20041001 Firefox/0.10.1"); 
-		    curl_setopt($ch, CURLOPT_HEADER, 0); 
-		    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-		    curl_setopt($ch, CURLOPT_TIMEOUT, 10); 
-		    $output = curl_exec($ch); 
-		    curl_close($ch); 
+		if (!function_exists('curl_init')) { // use file get contents 
+			$output = file_get_contents($url); 
+		} else { // use curl 
+			$ch = curl_init(); 
+			curl_setopt($ch, CURLOPT_URL, $url); 
+			curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE); 
+			curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; rv:1.7.3) Gecko/20041001 Firefox/0.10.1"); 
+			curl_setopt($ch, CURLOPT_HEADER, 0); 
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+			curl_setopt($ch, CURLOPT_TIMEOUT, 10); 
+			$output = curl_exec($ch); 
+			curl_close($ch); 
 		}
 		// Save file
 		file_put_contents($path, $output);
