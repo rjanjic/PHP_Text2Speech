@@ -2,7 +2,8 @@
 /******************************************************************
 Projectname:   PHP Text 2 Speech Class
 Version:       1.0
-Author:        Radovan Janjic <rade@it-radionica.com>
+Author:        Radovan Janjic <hi@radovanjanjic.com>
+Link:          https://github.com/uzi88/PHP_Text2Speech
 Last modified: 11 06 2013
 Copyright (C): 2012 IT-radionica.com, All Rights Reserved
 
@@ -172,65 +173,65 @@ class PHP_Text2Speech {
 	 * @param 	String 	$contents		- File contents
 	 * @return 	Integer
 	 */ 
-    function getStart($contents) {
-        for($i=0; $i < strlen($contents); $i++){
-            if(ord(substr($contents, $i, 1)) == 255){
-                return $i;
-            }
-        }
-    }
+	function getStart($contents) {
+		for($i=0; $i < strlen($contents); $i++){
+			if(ord(substr($contents, $i, 1)) == 255){
+				return $i;
+			}
+		}
+	}
 	
 	/** Function to find the end of the mp3 file
 	 * @param 	String 	$contents		- File contents
 	 * @return 	Integer
 	 */ 
-    function getEnd($contents) {
-        $c = substr($contents, (strlen($contents) - 128));
-        if(strtoupper(substr($c, 0, 3)) == 'TAG'){
-            return $c;
-        }else{
-            return FALSE;
-        }
-    }
+	function getEnd($contents) {
+		$c = substr($contents, (strlen($contents) - 128));
+		if(strtoupper(substr($c, 0, 3)) == 'TAG'){
+			return $c;
+		}else{
+			return FALSE;
+		}
+	}
 
 	/** Function to remove the ID3 tags from mp3 files
 	 * @param 	String 	$contents		- File contents
 	 * @return 	String
 	 */ 
-    function stripTags($contents) {
-        // Remove start
-        $start = $this->getStart($contents);
-        if ($start === FALSE) {
-            return FALSE;
-        } else {
-            return substr($contents, $start);
-        }
-        // Remove end tag
-        if ($this->getEnd($contents) !== FALSE){
-            return substr($contents, 0, (strlen($contents) - 129));
-        }
-    }
+	function stripTags($contents) {
+		// Remove start
+		$start = $this->getStart($contents);
+		if ($start === FALSE) {
+			return FALSE;
+		} else {
+			return substr($contents, $start);
+		}
+		// Remove end tag
+		if ($this->getEnd($contents) !== FALSE){
+			return substr($contents, 0, (strlen($contents) - 129));
+		}
+	}
 	
 	/** Function to download and save file
 	 * @param 	String 	$url		- URL
 	 * @param 	String 	$path 		- Local path
 	 */ 
-    function download($url, $path) { 
-        // Is curl installed?
-        if (!function_exists('curl_init')){ // use file get contents 
-            $output = file_get_contents($url); 
-        }else{ // use curl 
-            $ch = curl_init(); 
-            curl_setopt($ch, CURLOPT_URL, $url); 
-            curl_setopt($ch, CURLOPT_AUTOREFERER, true); 
-            curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; rv:1.7.3) Gecko/20041001 Firefox/0.10.1"); 
-            curl_setopt($ch, CURLOPT_HEADER, 0); 
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
-            curl_setopt($ch, CURLOPT_TIMEOUT, 10); 
-            $output = curl_exec($ch); 
-            curl_close($ch); 
-        }
+	function download($url, $path) { 
+		// Is curl installed?
+		if (!function_exists('curl_init')){ // use file get contents 
+		    $output = file_get_contents($url); 
+		}else{ // use curl 
+		    $ch = curl_init(); 
+		    curl_setopt($ch, CURLOPT_URL, $url); 
+		    curl_setopt($ch, CURLOPT_AUTOREFERER, true); 
+		    curl_setopt($ch, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows; U; Windows NT 5.1; rv:1.7.3) Gecko/20041001 Firefox/0.10.1"); 
+		    curl_setopt($ch, CURLOPT_HEADER, 0); 
+		    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
+		    curl_setopt($ch, CURLOPT_TIMEOUT, 10); 
+		    $output = curl_exec($ch); 
+		    curl_close($ch); 
+		}
 		// Save file
 		file_put_contents($path, $output);
-    }
+	}
 }
